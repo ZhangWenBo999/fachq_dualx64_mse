@@ -184,9 +184,11 @@ class Network(BaseNetwork):
                 assert model_output.shape[1] == 7
                 pred = self.predict_dualx(model_output=model_output, x_t=y_noisy, t=t)
 
-            losses = torch.mean((target - pred).view(y_0.shape[0], -1) ** 2, dim=1)
+            # losses = torch.mean((target - pred).view(y_0.shape[0], -1) ** 2, dim=1)
+            #
+            # loss = losses.mean()
 
-            loss = losses.mean()
+            loss = self.loss_fn(pred, target)
 
         else:
             noise_hat = self.denoise_fn(torch.cat([y_cond, y_noisy], dim=1), sample_gammas)
